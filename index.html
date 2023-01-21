@@ -12,22 +12,15 @@
     </div>
     <script>
         var connectWalletButton = document.getElementById("connect-wallet-button");
-        var web3 = new Web3(Web3.givenProvider);
 
         connectWalletButton.addEventListener("click", function() {
-            if (typeof web3 !== 'undefined') {
-                web3 = new Web3(web3.currentProvider);
+            if (typeof window.ethereum !== 'undefined') {
+                window.ethereum.enable().then(function(accounts){
+                    document.getElementById("address").innerHTML = accounts[0];
+                });
             } else {
                 alert("Please install MetaMask");
             }
-
-            web3.eth.getAccounts(function(error, accounts) {
-                if (error) {
-                    alert("Please connect your MetaMask wallet");
-                } else {
-                    document.getElementById("address").innerHTML = accounts[0];
-                }
-            });
         });
     </script>
 </body>
