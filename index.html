@@ -7,66 +7,92 @@
       let items = [];
 
       // This function will be called when the form is submitted
-      function listItem() {
-        // Get the form input values
-        let itemName = document.getElementById("item-name").value;
-        let itemPrice = document.getElementById("item-price").value;
-        let itemDescription = document.getElementById("item-description").value;
+   function listItem() {
+    // Get the form input values
+    let itemName = document.getElementById("item-name").value;
+    let itemPrice = document.getElementById("item-price").value;
+    let itemDescription = document.getElementById("item-description").value;
+    let itemImage = document.getElementById("item-image").files[0];
 
-        // Create a new object to store the item data
-        let item = {
-          name: itemName,
-          price: itemPrice,
-          description: itemDescription
-        };
+    // Create a new object to store the item data
+    let item = {
+      name: itemName,
+      price: itemPrice,
+      description: itemDescription,
+      image: itemImage
+    };
 
-        // Add the item to the array of listed items
-        items.push(item);
+    // Add the item to the array of listed items
+    items.push(item);
 
-        // Update the table to display the new item
-        updateTable();
+    // Update the table to display the new item
+    updateTable();
 
-        // Reset the form inputs
-        document.getElementById("item-name").value = "";
-        document.getElementById("item-price").value = "";
-        document.getElementById("item-description").value = "";
-      }
+    // Reset the form inputs
+    document.getElementById("item-name").value = "";
+    document.getElementById("item-price").value = "";
+    document.getElementById("item-description").value = "";
+    document.getElementById("item-image").value = "";
+  }
+
 
       // This function will update the table to display the listed items
-      function updateTable() {
-        // Get the table element
-        let table = document.getElementById("items-table");
+function updateTable() {
+    // Get the table element
+    let table = document.getElementById("items-table");
 
-        // Clear the existing table rows
-        table.innerHTML = "";
+    // Clear the existing table rows
+    table.innerHTML = "";
 
-        // Add a new table row for each item in the array
-        for (let i = 0; i < items.length; i++) {
-          let item = items[i];
-          let row = table.insertRow();
-          let nameCell = row.insertCell();
-          let priceCell = row.insertCell();
-          let descriptionCell = row.insertCell();
-          let buyCell = row.insertCell();
-          nameCell.innerHTML = item.name;
-          priceCell.innerHTML = item.price;
-          descriptionCell.innerHTML = item.description;
-          buyCell.innerHTML = '<button>Buy</button>';
-        }
-      }
+    // Add a new table row for each item in the array
+    for (let i = 0; i < items.length; i++) {
+      let item = items[i];
+      let row = table.insertRow();
+      let nameCell = row.insertCell();
+      let priceCell = row.insertCell();
+      let descriptionCell = row.insertCell();
+      let imageCell = row.insertCell();
+      let buyCell = row.insertCell();
+      nameCell.innerHTML = item.name;
+      priceCell.innerHTML = item.price;
+      descriptionCell.innerHTML = item.description;
+      
+      // Create an image element to display the item image
+      let image = document.createElement("img");
+      image.src = URL.createObjectURL(item.image);
+      image.height = 100;
+      image.width = 100;
+
+      // Add the image element to the image cell
+      imageCell.appendChild(image);
+
+      // Add a "Buy" button for the item
+      let buyButton = document.createElement("input");
+      buyButton.type = "button";
+      buyButton.value = "Buy";
+      buyButton.onclick = function() {
+        buyItem(i);
+      };
+      buyCell.appendChild(buyButton);
+    }
+  }
+
     </script>
   </head>
   <body>
     <h1>Crypto Marketplace</h1>
-    <form>
-      <label for="item-name">Item Name:</label>
-      <input type="text" id="item-name" name="item-name"><br>
-      <label for="item-price">Item Price (in TRX):</label>
-      <input type="text" id="item-price" name="item-price"><br>
-      <label for="item-description">Item Description:</label>
-      <textarea id="item-description" name="item-description"></textarea><br>
-      <input type="button" value="List Item" onclick="listItem()">
-    </form>
+<form>
+  <label for="item-name">Item Name:</label>
+  <input type="text" id="item-name" name="item-name"><br>
+  <label for="item-price">Item Price (in TRX):</label>
+  <input type="text" id="item-price" name="item-price"><br>
+  <label for="item-description">Item Description:</label>
+  <textarea id="item-description" name="item-description"></textarea><br>
+  <label for="item-image">Item Image:</label>
+  <input type="file" id="item-image" name="item-image"><br>
+  <input type="button" value="List Item" onclick="listItem()">
+</form>
+
     <h2>Items for Sale</h2>
     <table id="items-table">
       <tr>
