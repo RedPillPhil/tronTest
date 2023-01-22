@@ -2,7 +2,6 @@
 <html>
     <head>
         <script src="https://cdn.jsdelivr.net/npm/tronweb@2.1.0/dist/tronweb.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/tronlink-api@3.0.0/dist/tronlink.min.js"></script>
     </head>
     <body>
         <div id="connect-wallet-container">
@@ -13,24 +12,30 @@
         </div>
         <script>
             var connectWalletButton = document.getElementById("connect-wallet-button");
-
-            connectWalletButton.addEventListener("click", function() {
+            connectWalletButton.addEventListener("click", async function() {
                 if(typeof window.tronWeb === 'undefined'){
                     alert("Please install TRONLink");
                 }else{
-                    tronWeb = new TronWeb({
-                        fullNode: "https://api.trongrid.io",
-                        solidityNode: "https://api.trongrid.io",
-                        eventServer: "https://api.trongrid.io"
-                    });
-                    tronWeb.on('addressChanged', function(address) {
-                        if(address === null) {
-                            alert("Please connect your TRONLink wallet");
-                            tronWeb.tronLink.requestLogin();
+                    tronWeb = new TronWeb("https://api.trongrid.io");
+                    try {
+                        const res = await tronWeb.request(
+                            {
+                                method: 'tron_requestAccounts',
+                                params: {
+                                    websiteIcon: 'https://yourwebsiteicon.com',
+                                    websiteName: 'Your Website Name',
+                                },
+                            }
+                        );
+                        if(res.code === 200) {
+                            const address = tronWeb.defaultAddress.base58;
+                            document.getElementById("address").innerHTML= address;
                         }
-else{
-                document.getElementById("address").innerHTML= address;
-            }
-        });
-    }
-});
+                    } catch (err) {
+                        console.error(err);
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>
