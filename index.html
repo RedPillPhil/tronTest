@@ -1,41 +1,27 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <script src="https://cdn.jsdelivr.net/npm/tronweb@2.1.0/dist/tronweb.min.js"></script>
-    </head>
-    <body>
-        <div id="connect-wallet-container">
-            <button id="connect-wallet-button">Connect Wallet</button>
-            <div id="address-container">
-                <p>Your TRON Address: <span id="address"></span></p>
-            </div>
-        </div>
-        <script>
-            var connectWalletButton = document.getElementById("connect-wallet-button");
-            connectWalletButton.addEventListener("click", async function() {
-                if(typeof window.tronWeb === 'undefined'){
-                    alert("Please install TRONLink");
-                }else{
-                    tronWeb = new TronWeb("https://api.trongrid.io");
-                    try {
-                        const res = await tronWeb.request(
-                            {
-                                method: 'tron_requestAccounts',
-                                params: {
-                                    websiteIcon: 'https://yourwebsiteicon.com',
-                                    websiteName: 'Your Website Name',
-                                },
-                            }
-                        );
-                        if(res.code === 200) {
-                            const address = tronWeb.defaultAddress.base58;
-                            document.getElementById("address").innerHTML= address;
-                        }
-                    } catch (err) {
-                        console.error(err);
-                    }
-                }
-            });
-        </script>
-    </body>
+  <head>
+    <title>Crypto Marketplace</title>
+  </head>
+  <body>
+    <h1>Crypto Marketplace</h1>
+    <form>
+      <label for="item-name">Item Name:</label>
+      <input type="text" id="item-name" name="item-name"><br>
+      <label for="item-price">Item Price (in TRX):</label>
+      <input type="text" id="item-price" name="item-price"><br>
+      <label for="item-description">Item Description:</label>
+      <textarea id="item-description" name="item-description"></textarea><br>
+      <input type="submit" value="List Item">
+    </form>
+    <h2>Items for Sale</h2>
+    <table id="items-table">
+      <tr>
+        <th>Item Name</th>
+        <th>Item Price (in TRX)</th>
+        <th>Item Description</th>
+        <th>Buy</th>
+      </tr>
+    </table>
+  </body>
 </html>
