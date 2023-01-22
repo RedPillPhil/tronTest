@@ -62,40 +62,50 @@ function updateTable() {
     let table = document.getElementById("items-table");
 
     // Clear the existing table rows
-    //table.innerHTML = "";
+    table.innerHTML = "";
+
+    // Add table headers
+    let tableHeaders = `
+        <tr>
+          <th>Item Name</th>
+          <th>Item Price (in TRX)</th>
+          <th>Item Description</th>
+          <th>Item Image</th>
+          <th>Buy</th>
+        </tr>
+    `;
+    table.innerHTML = tableHeaders;
 
     // Add a new table row for each item in the array
     for (let i = 0; i < items.length; i++) {
-      let item = items[i];
-      let row = table.insertRow();
-      let nameCell = row.insertCell();
-      let priceCell = row.insertCell();
-      let descriptionCell = row.insertCell();
-      let imageCell = row.insertCell();
-      let buyCell = row.insertCell();
-      nameCell.innerHTML = item.name;
-      priceCell.innerHTML = item.price;
-      descriptionCell.innerHTML = item.description;
+        let item = items[i];
+        let row = table.insertRow();
+        let nameCell = row.insertCell();
+        let priceCell = row.insertCell();
+        let descriptionCell = row.insertCell();
+        let imageCell = row.insertCell();
+        let buyCell = row.insertCell();
+        nameCell.innerHTML = item.name;
+        priceCell.innerHTML = item.price;
+        descriptionCell.innerHTML = item.description;
 
-      // Create an image element to display the item image
-      let image = document.createElement("img");
-      image.src = URL.createObjectURL(item.image);
-      image.height = 100;
-      image.width = 100;
+        // Create an image element to display the item image
+        let image = document.createElement("img");
+        image.src = URL.createObjectURL(item.image);
 
-      // Add the image element to the image cell
-      imageCell.appendChild(image);
+        // Add the image element to the image cell
+        imageCell.appendChild(image);
 
-      // Add a "Buy" button for the item
-      let buyButton = document.createElement("input");
-      buyButton.type = "button";
-      buyButton.value = "Buy";
-      buyButton.onclick = function() {
-        buyItem(i);
-      };
-      buyCell.appendChild(buyButton);
+        // Add a "Buy" button for the item
+        let buyButton = document.createElement("input");
+        buyButton.type = "button";
+        buyButton.value = "Buy";
+        buyButton.onclick = function () {
+            buyItem(i);
+        };
+        buyCell.appendChild(buyButton);
     }
-  }
+}
 
 
     </script>
