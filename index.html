@@ -2,6 +2,59 @@
 <html>
   <head>
     <title>Crypto Marketplace</title>
+    <script>
+      // This array will store the listed items
+      let items = [];
+
+      // This function will be called when the form is submitted
+      function listItem() {
+        // Get the form input values
+        let itemName = document.getElementById("item-name").value;
+        let itemPrice = document.getElementById("item-price").value;
+        let itemDescription = document.getElementById("item-description").value;
+
+        // Create a new object to store the item data
+        let item = {
+          name: itemName,
+          price: itemPrice,
+          description: itemDescription
+        };
+
+        // Add the item to the array of listed items
+        items.push(item);
+
+        // Update the table to display the new item
+        updateTable();
+
+        // Reset the form inputs
+        document.getElementById("item-name").value = "";
+        document.getElementById("item-price").value = "";
+        document.getElementById("item-description").value = "";
+      }
+
+      // This function will update the table to display the listed items
+      function updateTable() {
+        // Get the table element
+        let table = document.getElementById("items-table");
+
+        // Clear the existing table rows
+        table.innerHTML = "";
+
+        // Add a new table row for each item in the array
+        for (let i = 0; i < items.length; i++) {
+          let item = items[i];
+          let row = table.insertRow();
+          let nameCell = row.insertCell();
+          let priceCell = row.insertCell();
+          let descriptionCell = row.insertCell();
+          let buyCell = row.insertCell();
+          nameCell.innerHTML = item.name;
+          priceCell.innerHTML = item.price;
+          descriptionCell.innerHTML = item.description;
+          buyCell.innerHTML = '<button>Buy</button>';
+        }
+      }
+    </script>
   </head>
   <body>
     <h1>Crypto Marketplace</h1>
@@ -12,7 +65,7 @@
       <input type="text" id="item-price" name="item-price"><br>
       <label for="item-description">Item Description:</label>
       <textarea id="item-description" name="item-description"></textarea><br>
-      <input type="submit" value="List Item">
+      <input type="button" value="List Item" onclick="listItem()">
     </form>
     <h2>Items for Sale</h2>
     <table id="items-table">
@@ -20,7 +73,7 @@
         <th>Item Name</th>
         <th>Item Price (in TRX)</th>
         <th>Item Description</th>
-        <th>Buy</th>
+       <th>Buy</th>
       </tr>
     </table>
   </body>
