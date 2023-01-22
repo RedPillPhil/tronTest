@@ -1,27 +1,36 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.2.9/dist/web3.min.js"></script>
-</head>
-<body>
-    <div id="connect-wallet-container">
-        <button id="connect-wallet-button">Connect Wallet</button>
-        <div id="address-container">
-            <p>Your Ethereum Address: <span id="address"></span></p>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/tronweb@2.1.0/dist/tronweb.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/tronlink-api@3.0.0/dist/tronlink.min.js"></script>
+    </head>
+    <body>
+        <div id="connect-wallet-container">
+            <button id="connect-wallet-button">Connect Wallet</button>
+            <div id="address-container">
+                <p>Your TRON Address: <span id="address"></span></p>
+            </div>
         </div>
-    </div>
-    <script>
-        var connectWalletButton = document.getElementById("connect-wallet-button");
+        <script>
+            var connectWalletButton = document.getElementById("connect-wallet-button");
 
-        connectWalletButton.addEventListener("click", function() {
-            if (typeof window.ethereum !== 'undefined') {
-                window.ethereum.enable().then(function(accounts){
-                    document.getElementById("address").innerHTML = accounts[0];
-                });
-            } else {
-                alert("Please install MetaMask");
+            connectWalletButton.addEventListener("click", function() {
+                if(typeof window.tronWeb === 'undefined'){
+                    alert("Please install TRONLink");
+                }else{
+                    tronWeb = new TronWeb({
+                        fullNode: "https://api.trongrid.io",
+                        solidityNode: "https://api.trongrid.io",
+                        eventServer: "https://api.trongrid.io"
+                    });
+                    tronWeb.on('addressChanged', function(address) {
+                        if(address === null) {
+                            alert("Please connect your TRONLink wallet");
+                            tronWeb.tronLink.requestLogin();
+                        }
+else{
+                document.getElementById("address").innerHTML= address;
             }
         });
-    </script>
-</body>
-</html>
+    }
+});
