@@ -64,17 +64,15 @@ function updateTable() {
     // Clear the existing table rows
     table.innerHTML = "";
 
-    // Add table headers
-    let tableHeaders = `
-        <tr>
-          <th>Item Name</th>
-          <th>Item Price (in TRX)</th>
-          <th>Item Description</th>
-          <th>Item Image</th>
-          <th>Buy</th>
-        </tr>
-    `;
-    table.innerHTML = tableHeaders;
+    // Add the table headers
+    let headers = `<tr>
+                      <th>Item Name</th>
+                      <th>Item Price (in TRX)</th>
+                      <th>Item Description</th>
+                      <th>Item Image</th>
+                      <th>Buy</th>
+                   </tr>`;
+    table.innerHTML = headers;
 
     // Add a new table row for each item in the array
     for (let i = 0; i < items.length; i++) {
@@ -100,12 +98,13 @@ function updateTable() {
         let buyButton = document.createElement("input");
         buyButton.type = "button";
         buyButton.value = "Buy";
-        buyButton.onclick = function () {
+        buyButton.onclick = function() {
             buyItem(i);
         };
         buyCell.appendChild(buyButton);
     }
 }
+
 
 
     </script>
