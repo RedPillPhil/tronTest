@@ -1,141 +1,44 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Crypto Marketplace</title>
-    <style>
-      /* Add your CSS styling here */
-      table {
-        border-collapse: collapse;
-        width: 100%;
-      }
-
-      th, td {
-        border: 1px solid black;
-        padding: 8px;
-        text-align: left;
-      }
-
-      th {
-        background-color: #f2f2f2;
-      }
-
-      img {
-        max-width: 100%;
-      }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.2.11/dist/web3.min.js"></script>
     <script>
-      // This array will store the listed items
-      let items = [];
+        // 1. Import web3.js
+        let web3 = new Web3(Web3.givenProvider || "http://localhost:8545")
 
-      // This function will be called when the form is submitted
-      function listItem() {
-        // Get the form input values
-        let itemName = document.getElementById("item-name").value;
-        let itemPrice = document.getElementById("item-price").value;
-        let itemDescription = document.getElementById("item-description").value;
-        let itemImage = document.getElementById("item-image").files[0];
-
-        // Create a new object to store the item data
-        let item = {
-          name: itemName,
-          price: itemPrice,
-          description: itemDescription,
-          image: itemImage
-        };
-
-        // Add the item to the array of listed items
-        items.push(item);
-
-        // Update the table to display the new item
-        updateTable();
-
-        // Reset the form inputs
-        document.getElementById("item-name").value = "";
-        document.getElementById("item-price").value = "";
-        document.getElementById("item-description").value = "";
-        document.getElementById("item-image").value = "";
-      }
-
-      // This function will update the table to display the listed items
-function updateTable() {
-    // Get the table element
-    let table = document.getElementById("items-table");
-
-    // Clear the existing table rows
-    table.innerHTML = "";
-
-    // Add the table headers
-    let headers = `<tr>
-                      <th>Item Name</th>
-                      <th>Item Price (in TRX)</th>
-                      <th>Item Description</th>
-                      <th>Item Image</th>
-                      <th>Buy</th>
-                   </tr>`;
-    table.innerHTML = headers;
-
-    // Add a new table row for each item in the array
-    for (let i = 0; i < items.length; i++) {
-        let item = items[i];
-        let row = table.insertRow();
-        let nameCell = row.insertCell();
-        let priceCell = row.insertCell();
-        let descriptionCell = row.insertCell();
-        let imageCell = row.insertCell();
-        let buyCell = row.insertCell();
-        nameCell.innerHTML = item.name;
-        priceCell.innerHTML = item.price;
-        descriptionCell.innerHTML = item.description;
-
-        // Create an image element to display the item image
-        let image = document.createElement("img");
-        image.src = URL.createObjectURL(item.image);
-
-        // Add the image element to the image cell
-        imageCell.appendChild(image);
-
-        // Add a "Buy" button for the item
-        let buyButton = document.createElement("input");
-        buyButton.type = "button";
-        buyButton.value = "Buy";
-        buyButton.onclick = function() {
-            buyItem(i);
-        };
-        buyCell.appendChild(buyButton);
-    }
-}
-
-
-
+        // 2. Set up event listener for MetaMask connection
+        window.addEventListener('load', async () => {
+            if (window.ethereum) {
+                window.web3 = new Web3(ethereum);
+                try {
+                    // Request account access
+                    await ethereum.enable();
+                    // Get the user's Ethereum address
+                    let userAddress = await web3.eth.getAccounts()
+                    // 3. Verify ownership of specific NFT
+                    let contract = new web3.eth.Contract(ABI, contractAddress)
+                    let ownership = await contract.methods.verifyNFT(nftId, userAddress).call()
+                    // 4. Grant access if user is owner of NFT
+                    if (ownership) {
+                        // Grant access to webpage
+                        document.getElementById("content").style.display = "block";
+                    } else {
+                        // 5. Redirect to error page or prompt to acquire NFT
+                        document.getElementById("error").style.display = "block";
+                    }
+                } catch (error) {
+                    console.error(error)
+                }
+            }
+        })
     </script>
   </head>
   <body>
-    <h1>Crypto Marketplace</h1>
-    <form>
-      <label for="item-name">Item Name:</label>
-      <input type="text" id="item-name" name="item-name"><br>
-      <label for="item-price">Item Price (in TRX):</label>
-      <input type="text" id="item-price" name="item-price"><br>
-      <label for="item-description">Item Description:</label>
-      <textarea id="item-description" name="item-description"></textarea><br>
-      <label for="item-image">Item Image:</label>
-      <input type="file" id="item-image" name="item-image"><br>
-      <input type="button" value="List Item" onclick="listItem()">
-    </form>
-
-    <h2>Items for Sale</h2>
-   <table id="items-table">
-  <thead>
-    <tr>
-      <th>Item Name</th>
-      <th>Item Price (in TRX)</th>
-      <th>Item Description</th>
-      <th>Buy</th>
-    </tr>
-  </thead>
-  <tbody>
-  </tbody>
-</table>
-
+    <div id="content" style="display: none;">
+        <!-- Your protected webpage content goes here -->
+    </div>
+    <div id="error" style="display: none;">
+        <!-- Error message or prompt to acquire NFT goes here -->
+    </div>
   </body>
 </html>
