@@ -1,35 +1,73 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.2.11/dist/web3.min.js"></script>
-    <script>
-        let web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
-        let userAddress;
-        let contract;
-        function connectMetaMask() {
-            if (window.ethereum) {
-                window.web3 = new Web3(ethereum);
-                try {
-                    ethereum.enable().then(async () => {
-                        userAddress = await web3.eth.getAccounts();
-                        document.getElementById("address").innerHTML = "Your Ethereum Address: " + userAddress;
-                        contract = new web3.eth.Contract(ABI, contractAddress)
-                    });
-                } catch (error) {
-                    console.error(error);
-                }
-            }
-        }
-    </script>
-  </head>
-  <body>
-    <button onclick="connectMetaMask()">Connect MetaMask</button>
-    <div id="address"></div>
-    <div id="content" style="display: none;">
-        <!-- Your protected webpage content goes here -->
-    </div>
-    <div id="error" style="display: none;">
-        <!-- Error message or prompt to acquire NFT goes here -->
-    </div>
-  </body>
+<head>
+<script>
+
+var coinSide = "";
+var coinFlip = "";
+var coinFlipResult = "";
+var ballPossession = "";
+var driveResult = "";
+var passSuccess = "";
+var runSuccess = "";
+
+function coinFlip() {
+  coinFlip = Math.random();
+  if (coinFlip < 0.5) {
+    coinSide = "heads";
+  } else {
+    coinSide = "tails";
+  }
+  coinFlipResult = "Coin flip result: " + coinSide;
+}
+
+function kickOrReceive() {
+  if (coinSide == "heads") {
+    ballPossession = "You have chosen to kick the ball.";
+  } else {
+    ballPossession = "You have chosen to receive the ball.";
+  }
+}
+
+function pass() {
+  passSuccess = Math.random();
+  if (passSuccess < 0.5) {
+    driveResult = "Pass complete!";
+  } else {
+    driveResult = "Pass incomplete.";
+  }
+}
+
+function run() {
+  runSuccess = Math.random();
+  if (runSuccess < 0.5) {
+    driveResult = "Run successful!";
+  } else {
+    driveResult = "Run stopped.";
+  }
+}
+
+function score() {
+  if (driveResult == "Pass complete!" || driveResult == "Run successful!") {
+    driveResult = "Touchdown! You win!";
+  } else {
+    driveResult = "Drive ended without a score. Kick a field goal or punt.";
+  }
+}
+
+</script>
+</head>
+<body>
+
+<button onclick="coinFlip()">Coin Flip</button>
+<button onclick="kick or Receive"></button>
+<button onclick="pass()">Pass</button>
+<button onclick="run()">Run</button>
+<button onclick="score()">Score</button>
+
+<p id="coinFlipResult"></p>
+<p id="ballPossession"></p>
+<p id="driveResult"></p>
+
+</body>
 </html>
