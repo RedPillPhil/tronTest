@@ -3,37 +3,28 @@
   <head>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.2.11/dist/web3.min.js"></script>
     <script>
-        // 1. Import web3.js
-        let web3 = new Web3(Web3.givenProvider || "http://localhost:8545")
-
-        // 2. Set up event listener for MetaMask connection
-        window.addEventListener('load', async () => {
+        let web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
+        let userAddress;
+        let contract;
+        function connectMetaMask() {
             if (window.ethereum) {
                 window.web3 = new Web3(ethereum);
                 try {
-                    // Request account access
-                    await ethereum.enable();
-                    // Get the user's Ethereum address
-                    let userAddress = await web3.eth.getAccounts()
-                    // 3. Verify ownership of specific NFT
-                    let contract = new web3.eth.Contract(ABI, contractAddress)
-                    let ownership = await contract.methods.verifyNFT(nftId, userAddress).call()
-                    // 4. Grant access if user is owner of NFT
-                    if (ownership) {
-                        // Grant access to webpage
-                        document.getElementById("content").style.display = "block";
-                    } else {
-                        // 5. Redirect to error page or prompt to acquire NFT
-                        document.getElementById("error").style.display = "block";
-                    }
+                    ethereum.enable().then(async () => {
+                        userAddress = await web3.eth.getAccounts();
+                        document.getElementById("address").innerHTML = "Your Ethereum Address: " + userAddress;
+                        contract = new web3.eth.Contract(ABI, contractAddress)
+                    });
                 } catch (error) {
-                    console.error(error)
+                    console.error(error);
                 }
             }
-        })
+        }
     </script>
   </head>
   <body>
+    <button onclick="connectMetaMask()">Connect MetaMask</button>
+    <div id="address"></div>
     <div id="content" style="display: none;">
         <!-- Your protected webpage content goes here -->
     </div>
